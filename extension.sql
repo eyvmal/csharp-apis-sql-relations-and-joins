@@ -121,12 +121,40 @@ INSERT INTO MovieRoles (movie, director, star, writer) VALUES
     (SELECT id FROM People WHERE name = 'Edmond Rostand'));
 
 -- Queries
-SELECT m.name, m.year, m.genre, m.score, d.name "Director", s.name "Star", w.name "Writer"
+-- Show the title and director name for all films
+SELECT m.name, d.name "Director"
+FROM MovieRoles mr
+         INNER JOIN Movies m ON mr.movie = m.id
+         INNER JOIN People d ON mr.director = d.id;
+
+-- Show the title, director and star name for all films
+SELECT m.name, d.name "Director", s.name "Star"
+FROM MovieRoles mr
+         INNER JOIN Movies m ON mr.movie = m.id
+         INNER JOIN People d ON mr.director = d.id
+         INNER JOIN People s ON mr.star = s.id;
+
+-- Show the title of films where the director is from the USA
+SELECT m.name, d.name "Director", d.country
+FROM MovieRoles mr
+         INNER JOIN Movies m ON mr.movie = m.id
+         INNER JOIN People d ON mr.director = d.id
+         WHERE d.country = 'USA';
+
+-- Show only those films where the writer and the director are the same person
+SELECT m.name, m.year, m.genre, m.score, d.name "Director", w.name "Writer"
+FROM MovieRoles mr
+         INNER JOIN Movies m ON mr.movie = m.id
+         INNER JOIN People d ON mr.director = d.id
+         INNER JOIN People w ON mr.writer = w.id
+         WHERE d.name = w.name;
+
+-- Show directors and film titles for films with a score of 8 or higher
+SELECT m.name, m.score, d.name "Director"
 FROM MovieRoles mr
 INNER JOIN Movies m ON mr.movie = m.id
 INNER JOIN People d ON mr.director = d.id
-INNER JOIN People s ON mr.star = s.id
-INNER JOIN People w ON mr.writer = w.id;
+WHERE m.score >= 8;
 
 -- Extension 2
 CREATE TABLE Cast (
